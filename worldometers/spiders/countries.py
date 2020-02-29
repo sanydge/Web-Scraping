@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import logging
+from scrapy.utils.response import open_in_browser
+
 
 
 class CountriesSpider(scrapy.Spider):
@@ -9,15 +11,15 @@ class CountriesSpider(scrapy.Spider):
     start_urls = ['http://www.worldometers.info/world-population/population-by-country/']
 
     def parse(self, response):
-        countries = response.xpath("//td/a")
-        for country in countries:
-            name = country.xpath(".//text()").get()
-            link = country.xpath(".//@href").get()
+        # countries = response.xpath("//td/a")
+        # for country in countries:
+        #     name = country.xpath(".//text()").get()
+        #     link = country.xpath(".//@href").get()
 
             # absolute_url = f"https://www.worldometers.info{link}"
             # absolute_url = response.urljoin(link)
 
-            yield response.follow(url=link, callback=self.parse_country, meta={'country_name': name})
+        yield response.follow(url="https://www.worldometers.info/world-population/china-population/", callback=self.parse_country, meta={'country_name': "China"})
 
     def parse_country(self,response):
         name = response.request.meta['country_name']
